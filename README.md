@@ -34,6 +34,11 @@ During our rigorous 5-Fold Stratified Cross-Validation on the `TRAIN.csv` datase
 * `README.md`: Setup, usage, and project documentation.
 * `LICENSE`: MIT License covering the codebase.
 
+## 🗄️ Dataset Access
+
+To utilize the T4 GPUs for efficient training, we uploaded the provided competition dataset to Kaggle. You can access our Kaggle dataset link here:
+**https://www.kaggle.com/datasets/mayankbhatt1369/mlarena**
+
 ## ⚙️ Setup Instructions
 
 To replicate our training environment locally, you will need Python 3.8+ installed on your system. 
