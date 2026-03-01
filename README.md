@@ -41,29 +41,31 @@ To replicate our training environment locally, you will need Python 3.8+ install
 *(Note: For maximum efficiency and exact replication of our pipeline, we highly recommend executing the training code utilizing an NVIDIA T4 GPU via Kaggle Notebooks or Google Colab.)*
 
 1. Clone this repository to your local machine:
-   ```bash
+ ```bash
    git clone [https://github.com/iammayankbhatt/ML_aIrEEEna_teamhawks.git](https://github.com/iammayankbhatt/ML_aIrEEEna_teamhawks.git)
    cd ML_aIrEEEna_teamhawks
-Install the required dependencies:
+   ```
+2. Install the required dependencies:
 
-Bash
+```bash
 pip install -r requirements.txt
-💻 Usage Instructions
-Option 1: Retrain the Pipeline
-Download the TRAIN.csv and TEST.csv datasets provided by the competition organizers.
+```
+## 💻 Usage Instructions
+### Option 1: Retrain the Pipeline
+1. Download the TRAIN.csv and TEST.csv datasets provided by the competition organizers.
 
-Place both data files in the root directory of this cloned repository.
+2. Place both data files in the root directory of this cloned repository.
 
-Open solution_notebook.ipynb using Jupyter Notebook, JupyterLab, or VS Code.
+3. Open solution_notebook.ipynb using Jupyter Notebook, JupyterLab, or VS Code.
 
-Ensure the file paths point to your local files (e.g., train_path = 'TRAIN.csv').
+4. Ensure the file paths point to your local files (e.g., train_path = 'TRAIN.csv').
 
-Run all cells sequentially. The script will handle SHAP pruning, Optuna tuning, ensemble training, threshold optimization, and output a new FINAL.csv.
+5. Run all cells sequentially. The script will handle SHAP pruning, Optuna tuning, ensemble training, threshold optimization, and output a new FINAL.csv.
 
-Option 2: Instant Inference
+### Option 2: Instant Inference
 Use the included full_pipeline.pkl with joblib to load the pre-trained Level-1 and Level-2 models instantly. This bypasses the training phase entirely to generate predictions on new data efficiently.
 
-📜 Declaration & License
+## 📜 Declaration & License
 All code and methodologies within this repository represent the original work of Team Agile_Hawks (Mayank Bhatt & Ansh Karki). The dataset used in this project is strictly for educational purposes as stipulated by the IEEE SB GEHU ML Challenge organizers. No ownership of the data is declared or implied.
 
 The code in this repository is open-sourced under the MIT License.
