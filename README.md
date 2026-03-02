@@ -1,6 +1,6 @@
 # IEEE SB GEHU - Machine Learning Challenge: Device Fault Detection
 
-**Team: Agile_Hawks** **Members:** Mayank Bhatt & Ansh Karki  
+**Team: Agile_Hawks** || **Members:** Mayank Bhatt & Ansh Karki  
 
 This repository contains our team's highly optimized, original solution for the online qualifiers of the Machine Learning Challenge hosted by IEEE SB, GEHU. The objective is to determine the operational status of embedded devices (Normal: `0` vs. Faulty: `1`) based on 47 continuous numerical sensor features (`F01` - `F47`).
 
