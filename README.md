@@ -1,43 +1,93 @@
-# IEEE SB GEHU - Machine Learning Challenge: Device Fault Detection
+# IEEE SB GEHU – Machine Learning Challenge (Device Fault Detection)
 
-**Team: Agile_Hawks** || **Members:** Mayank Bhatt & Ansh Karki  
+#### Team: Agile_Hawks
+#### Members: Mayank Bhatt, Ansh Karki
 
-This repository contains our team's highly optimized, original solution for the online qualifiers of the Machine Learning Challenge hosted by IEEE SB, GEHU. The objective is to determine the operational status of embedded devices (Normal: `0` vs. Faulty: `1`) based on 47 continuous numerical sensor features (`F01` - `F47`).
+This repository contains our solution for the IEEE SB GEHU Machine Learning Challenge.
+The task is to determine whether a device is Normal (0) or Faulty (1) using 47 numerical sensor features (F01–F47).
 
-## 🚀 Project Description & Methodology
+---
+## Project Overview
 
-We treated this as a binary classification problem. To maximize generalization and eliminate noisy sensor data, we engineered a rigorous, multi-stage machine learning pipeline that leverages GPU acceleration and advanced ensemble techniques. 
+This problem was treated as a binary classification task.
+We experimented with feature engineering, gradient boosting models, and ensemble techniques to improve the model’s ability to detect faulty devices.
 
-Our pipeline architecture includes:
+The final pipeline achieved:
 
-1. **Domain-Agnostic Feature Engineering:** Engineered ~50 synthetic features (row-wise statistics, polynomial interactions, and sensor groupings). We used **SHAP (SHapley Additive exPlanations)** on a baseline XGBoost model to automatically prune zero-importance features and reduce dimensionality.
-2. **Bayesian Hyperparameter Tuning:** Utilized **Optuna** with 5-Fold Cross Validation to dynamically discover the optimal learning rates, tree depths, and regularization constraints for our models.
-3. **GPU-Accelerated Diverse Ensemble:** Trained a robust Level-1 ensemble of **XGBoost, CatBoost, and LightGBM**. Explicit class imbalance handling (`scale_pos_weight` and balanced auto-weights) was applied to ensure high sensitivity to the minority fault class.
-4. **Level-2 Stacking & Isotonic Calibration:** Extracted Out-Of-Fold (OOF) probabilities from our base models and fed them into a Logistic Regression meta-classifier. We then applied Isotonic Regression to ensure our predicted probabilities represented true fault likelihoods.
-5. **Dynamic Decision Thresholding:** By iterating through classification thresholds on our calibrated probabilities, we mathematically determined that a decision boundary of **0.52** maximized our F1-Score.
+- **OOF Accuracy: 0.9903**
 
-## 📊 Model Performance Metrics
+- **OOF F1 Score: 0.9877**
+---
+## Methodology
 
-During our rigorous 5-Fold Stratified Cross-Validation on the `TRAIN.csv` dataset, our stacking ensemble achieved the following Out-Of-Fold metrics:
+Our approach consists of the following main steps.
 
-* **Overall Accuracy:** 0.9903
-* **Optimized F1-Score:** 0.9877 (at 0.52 threshold)
-* **Precision (Faulty Class):** 0.99
-* **Recall (Faulty Class):** 0.98
+### 1. Feature Engineering
 
-## 📁 Repository Structure
+Since the sensor features are anonymized, additional features were created to extract more information from the data. These include:
 
-* `solution_notebook.ipynb`: The heavily documented Jupyter/Kaggle notebook containing data ingestion, feature engineering, Optuna tuning, model training, and meta-model stacking.
-* `FINAL.csv`: The final prediction file generated for the `TEST.csv` dataset, formatted strictly as `ID -> CLASS`.
-* `full_pipeline.pkl`: The serialized, ultra-lightweight pre-trained meta-ensemble and threshold configuration for instant inference without retraining.
-* `requirements.txt`: List of required Python packages for easy setup.
-* `README.md`: Setup, usage, and project documentation.
-* `LICENSE`: MIT License covering the codebase.
+- Row-wise statistics (mean, standard deviation, min, max, skewness)
 
-## 🗄️ Dataset Access
+- Sensor group sums
 
-To utilize the T4 GPUs for efficient training, we uploaded the provided competition dataset to Kaggle. You can access our Kaggle dataset link here:
-**https://www.kaggle.com/datasets/mayankbhatt1369/mlarena**
+- Interaction features between nearby sensors
+
+### 2. Feature Selection using SHAP
+
+A baseline XGBoost model was trained and SHAP feature importance was used to identify useful features.
+Most engineered features had non-zero importance, so all features were retained.
+
+### 3. Hyperparameter Tuning
+
+Hyperparameters for XGBoost, CatBoost, and LightGBM were tuned using Optuna.
+
+### 4. Model Training
+
+The three models were trained using 5-fold Stratified Cross Validation.
+Class imbalance was handled using scale_pos_weight / class weights.
+
+### 5. Stacking
+
+Predictions from the three models were combined using a Logistic Regression meta-model.
+
+### 6. Calibration and Threshold Selection
+
+Isotonic calibration was applied to improve probability estimates.
+Different classification thresholds were tested on OOF predictions and the one giving the best F1-score was selected.
+
+---
+## Repository Structure
+```
+solution_notebook.ipynb   # Training pipeline and experiments
+FINAL.csv                 # Final predictions for the test set
+full_pipeline.pkl         # Saved trained model
+requirements.txt          # Python dependencies
+README.md                 # Project documentation
+```
+---
+
+## Training Environment
+
+Model training and experimentation were performed using Kaggle Notebooks with access to an NVIDIA T4 GPU. This helped speed up the training of gradient boosting models such as XGBoost, CatBoost, and LightGBM, especially during cross-validation and hyperparameter tuning.
+
+---
+## Dataset
+
+The dataset was provided as part of the IEEE SB GEHU ML Challenge.
+The dataset used in this project was uploaded to Kaggle to make GPU training easier.
+
+Kaggle Dataset Link:
+https://www.kaggle.com/datasets/mayankbhatt1369/mlarena
+
+The dataset contains:
+
+TRAIN.csv – training data with labels
+
+TEST.csv – test data used for generating predictions
+
+Each sample contains 47 numerical sensor features (F01–F47) representing device measurements.
+
+---
 
 ## ⚙️ Setup Instructions
 
@@ -70,7 +120,8 @@ pip install -r requirements.txt
 ### Option 2: Instant Inference
 Use the included full_pipeline.pkl with joblib to load the pre-trained Level-1 and Level-2 models instantly. This bypasses the training phase entirely to generate predictions on new data efficiently.
 
-## 📜 Declaration & License
-All code and methodologies within this repository represent the original work of Team Agile_Hawks (Mayank Bhatt & Ansh Karki). The dataset used in this project is strictly for educational purposes as stipulated by the IEEE SB GEHU ML Challenge organizers. No ownership of the data is declared or implied.
+---
 
-The code in this repository is open-sourced under the MIT License.
+## License
+
+This repository is released under the MIT License.
